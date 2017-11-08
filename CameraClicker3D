@@ -1,0 +1,50 @@
+using UnityEngine;
+
+/*
+by Andres Pablo - UNLP, Argentina
+ 
+ Cuando haces click envía un mensaje al objeto ("Clickeado").
+ Para escuchar, añadir un script al objetivo que tenga una funcion pública:
+  
+  public void Clickeado(){
+    // ejecutar codigo en el receptor
+  }
+*/
+
+[Tooltip("La distancia máxima de interacción")]
+public float _distancia = 10f;
+
+public class CameraClicker3D : MonoBehaviour {
+
+    private Camera camara;
+
+    void Start()
+    {
+            camara = Camera.main;
+    }
+
+
+    void Update()
+    {
+        // Click izquiero...
+        if (Input.GetMouseButtonDown(0))
+        {
+        // Castea un ray desde la cámara hacia el puntero en busca de una colisión...
+            Ray ray = camara.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, _distancia))
+            {
+                // Si encuentra una colisión, captura el Transform y envía el mensaje
+                EnviarMensaje(hit.transform);
+            }
+        }
+    }
+    
+    
+    void EnviarMensaje(Transform receptor){
+      
+      // Envia el mensaje al receptor y todos sus 'Padres'
+      SendMessageUpwards("Clickeado", SendMessageOptions.DontRequireReceiver);
+    }
+	
+}
