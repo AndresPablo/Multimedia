@@ -1,0 +1,33 @@
+using UnityEngine;
+using System.Collections;
+
+public class OSC_Listener : MonoBehaviour {
+
+    public OSC oscManager;
+    [Tooltip("Una direccion a escuchar")]
+    public string addressPat = "/c1";
+
+    void Start()
+    {
+        // Referencia al manager global
+        osc = OSC.instance;
+        SetListeners();
+    }
+
+
+// Prepara eventos para actuar en cuanto lleguen ciertos mensajes por OSC
+   public void SetListeners()
+    {
+        osc.SetAddressHandler(addressPat, OnReceive_Color1);
+    }
+
+
+    void OnReceive_Color1(OscMessage msje)
+    {
+        float x = msje.GetFloat(0);
+        float y = msje.GetFloat(1);
+        Debug.Log("OSC addressPattern |  " + "x: "  + x + " y: " + y);
+        // EjecutarFuncion();
+    }
+    
+}
