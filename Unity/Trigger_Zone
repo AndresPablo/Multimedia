@@ -1,0 +1,46 @@
+using UnityEngine;
+using System.Collections;
+using UnityEngine.Events;
+
+/* 
+* by Andres Pablo.
+* "Usar los eventos públicos para detonar acciones en otros objetos."
+* !! Necesita un Collider
+*/
+
+public class TriggerZone_Simple : MonoBehaviour {
+
+    [Header("Jugador solamente?")]
+    public bool playerOnly = true;
+
+    public UnityEvent OnEnter;
+    public UnityEvent OnExit;
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (playerOnly)
+        {
+            if(other.CompareTag("Player"))
+                OnEnter.Invoke();
+        }
+        else
+            OnEnter.Invoke();
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player"))
+            Debug.Log("stay", other.gameObject);
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (playerOnly)
+        {
+            if (other.CompareTag("Player"))
+                OnExit.Invoke();
+        }
+        else
+            OnExit.Invoke();
+    }
+}
