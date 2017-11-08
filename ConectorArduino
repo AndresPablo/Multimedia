@@ -1,0 +1,105 @@
+/* ArduinoConnector by Alan Zucconi
+ * http://www.alanzucconi.com/?p=2979
+ * Traducido por Andres Pablo para Facultad de Bellas Artes, UNLP
+ */
+using UnityEngine;
+using System;
+using System.Collections;
+using System.IO.Ports;
+using UnityEngine.Events;
+
+public class ArduinoConnector : MonoBehaviour {
+
+    /* The serial port where the Arduino is connected. */
+    [Tooltip("El puerto serial al que Arduino está conectado")]
+    public string port = "COM6";
+    /* The baudrate of the serial port. */
+    [Tooltip("El baudrate del puerto serial")]
+    public int baudrate = 9600;
+
+    private SerialPort stream;
+
+    void Start()
+    {
+        Open();
+    }
+
+    public void Open () {
+        // Abre el puerto serial
+        stream = new SerialPort(port, baudrate);
+        stream.ReadTimeout = 50;
+        stream.Open();
+        //this.stream.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
+    }
+
+    // Invocar esta función para enviar  <---
+    public void WriteToArduino(string message)
+    {
+        // Envia la peticion
+        stream.WriteLine(message);
+        stream.BaseStream.Flush();
+    }
+
+    // Invocar esta función para leer  <---
+    public string ReadFromArduino(int timeout = 0)
+    {
+        stream.ReadTimeout = timeout;
+        try
+        {
+            return stream.ReadLine();
+        }
+        catch (TimeoutException)
+        {
+            return null;
+        }
+    }
+    
+    // Co-rutina que hace una carga asíncrona
+    public IEnumerator AsynchronousReadFromArduino(Action<string> callback, Action fail = null, float timeout = float.PositiveInfinity)
+    {
+        DateTime initialTime = DateTime.Now;
+        DateTime nowTime;
+        TimeSpan diff = default(TimeSpan);
+
+        string dataString = null;
+
+        do
+        {
+            // A single read attempt
+            try
+            {
+                dataString = stream.ReadLine();
+            }
+            catch (TimeoutException)
+            {
+                dataString = null;
+            }
+
+            if (dataString != null)
+            {
+                callback(dataString);
+                yield return null;
+            } else
+                yield return new WaitForSeconds(0.05f);
+
+            nowTime = DateTime.Now;
+            diff = nowTime - initialTime;
+
+        } while (diff.Milliseconds < timeout);
+
+        if (fail != null)
+            fail();
+        yield return null;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            Close();
+    }
+
+    public void Close()
+    {
+        stream.Close();
+    }
+}
