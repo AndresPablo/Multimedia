@@ -44,7 +44,7 @@ public class CameraClicker3D : MonoBehaviour {
     void EnviarMensaje(Transform receptor){
       
       // Envia el mensaje al receptor y todos sus 'Padres'
-      SendMessageUpwards("Clickeado", SendMessageOptions.DontRequireReceiver);
+      receptor.SendMessageUpwards("Clickeado", SendMessageOptions.DontRequireReceiver);
     }
 	
 }
