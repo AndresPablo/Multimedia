@@ -1,0 +1,19 @@
+using UnityEngine;
+
+public class Pausa : MonoBehaviour {
+
+	public GameObject panel;
+	bool enPausa;
+
+	public void Pausar(){
+		enPausa = !enPausa;
+		panel.SetActive(enPausa);
+
+		if(enPausa){
+			Time.timeScale = 0F;
+		}else{
+			Time.timeScale = 1F;
+		}
+	}
+
+}
