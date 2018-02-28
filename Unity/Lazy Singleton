@@ -1,0 +1,9 @@
+	#region Singleton
+  
+	public static GameManager Instance;
+  
+	void Awake(){
+		Instance = this;
+	}
+
+	#endregion Singleton
