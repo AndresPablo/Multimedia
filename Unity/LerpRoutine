@@ -1,0 +1,26 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+// Con esto podemos hacer un "Lerp" controlado y ejecutar codigo cuando termina 
+// Este ejemplo llena una barra de progreso
+
+public class LerpRoutine : MonoBehaviour{
+
+  [SerializeField]
+	private Image fill;
+
+  IEnumerator LerpFillRoutine(float a, float b, float tiempo){
+      float tiempoPasado = 0F;
+      
+      while(tiempoPasado < tiempo){
+      
+        fill.fillAmount = Mathf.Lerp(a, b, (tiempoPasado/tiempo));
+        
+        tiempoPasado += Time.deltaTime;
+        
+        yield return new WaitForEndOfFrame();
+      }
+    }
+
+}
