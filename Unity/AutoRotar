@@ -1,0 +1,10 @@
+using UnityEngine;
+
+public class AutoRotar : MonoBehaviour {
+
+	public float rotSpeed = 10;
+
+	void Update () {
+		transform.Rotate(0,rotSpeed,0);
+	}
+}
