@@ -1,0 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class RaycastMouse : MonoBehaviour {
+
+  void Update()
+  {
+    if (Input.GetMouseButtonDown(0)
+    {
+      Disparar();
+    }
+  }
+  
+  void Disparar()
+  {
+      // Creamos un vector desde la cámara y convertimos las coordenadas
+      Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+      // Tomamos la pos del mouse
+      Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
+            
+      // Creamos una variable para guardar el impacto del Ray y la llenamos con Physics2D.Raycast();
+      RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
+      
+      // Si el impacto devolvió ALGUN collider, procedemos
+      if (hit.collider != null) {
+         Debug.Log(hit.collider.gameObject.name);
+      }
+  }
+}
