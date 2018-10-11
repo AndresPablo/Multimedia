@@ -22,9 +22,19 @@ public class RaycastMouse : MonoBehaviour {
       // Creamos una variable para guardar el impacto del Ray y la llenamos con Physics2D.Raycast();
       RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
       
-      // Si el impacto devolvió ALGUN collider, procedemos
+      // Si el impacto devolvió ALGUN collider, procedemos (null significa que la variable está vacia)
       if (hit.collider != null) {
          Debug.Log(hit.collider.gameObject.name);
+         
+         // Creamos una variable del tipo que necesitamos (EnemyManager)
+         // ... y buscamos el script que a partir del collider
+         EnemyManager scriptEnemigo = hit.collider.gameObject.GetComponent<EnemyManager>();
+         
+         // Si ese objeto de verdad tenía el script, hacemos lo que haga falta, como hacer que ejecute una FUNCION PUBLICA
+         if(scriptEnemigo != null)
+         {
+            scriptEnemigo.Morir();
+         }
       }
   }
 }
